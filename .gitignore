@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# Backend
+backend/node_modules/
+
+# Logs
+*.log
+
+# Env files
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
