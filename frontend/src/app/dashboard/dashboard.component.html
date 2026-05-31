@@ -1,61 +1,294 @@
 <mat-sidenav-container class="container">
 
+  <!-- SIDEBAR -->
+
   <mat-sidenav mode="side" opened>
-    <mat-toolbar>CloudPulse</mat-toolbar>
+
+    <mat-toolbar>
+      CloudPulse
+    </mat-toolbar>
 
     <mat-nav-list>
-      <a mat-list-item>Dashboard</a>
-      <a mat-list-item>Servers</a>
-      <a mat-list-item>Logs</a>
-      <a mat-list-item>Alerts</a>
+
+      <a mat-list-item>
+        <span>Dashboard</span>
+      </a>
+
+      <a mat-list-item>
+        <span>Servers</span>
+      </a>
+
+      <a mat-list-item>
+        <span>Logs</span>
+      </a>
+
+      <a mat-list-item>
+        <span>Alerts</span>
+      </a>
+
     </mat-nav-list>
+
   </mat-sidenav>
+
+  <!-- MAIN CONTENT -->
 
   <mat-sidenav-content>
 
-    <mat-toolbar color="primary">
-      DevOps Monitoring Dashboard
+    <mat-toolbar>
+      🚀 CloudPulse DevOps Dashboard
     </mat-toolbar>
 
-   <div class="content">
+    <div class="content">
 
-  <mat-card>
-    <h3>CPU Usage</h3>
-    <p>{{ cpu }}%</p>
-  </mat-card>
+      <!-- SUMMARY CARDS -->
 
-  <mat-card>
-    <h3>Memory Usage</h3>
-    <p>{{ ram }}%</p>
-  </mat-card>
+      <div class="summary-grid">
 
-  <mat-card>
-    <h3>Uptime</h3>
-    <p>{{ uptime }}</p>
-  </mat-card>
+        <mat-card>
+          <h3>Total Containers</h3>
+          <h2>{{ totalContainers }}</h2>
+        </mat-card>
 
+        <mat-card>
+          <h3>Running</h3>
+          <h2>{{ runningContainers }}</h2>
+        </mat-card>
 
+        <mat-card>
+          <h3>Stopped</h3>
+          <h2>{{ stoppedContainers }}</h2>
+        </mat-card>
 
-  <!-- ✅ ADD THIS BELOW -->
-<mat-card>
-  <h3>Live System Metrics</h3>
-  <canvas #cpuChartCanvas></canvas>
-</mat-card>
+        <mat-card>
+          <h3>Critical Alerts</h3>
+          <h2>{{ criticalAlerts }}</h2>
+        </mat-card>
 
-<mat-card>
-  <h3>Status</h3>
+      </div>
 
-  <h2
-    [ngStyle]="{
-      color: status === 'HEALTHY' ? 'green' :
-             status === 'WARNING' ? 'orange' : 'red'
-    }"
-  >
-    {{ status }}
-  </h2>
-</mat-card>
+      <!-- TOP METRIC CARDS -->
 
-</div>
+      <div class="summary-grid">
+
+        <mat-card>
+
+          <h3>CPU Usage</h3>
+
+          <h2
+            [style.color]="
+              cpu > 80
+                ? '#ef4444'
+                : cpu > 60
+                ? '#f59e0b'
+                : '#22c55e'
+            "
+          >
+            {{ cpu }}%
+          </h2>
+
+        </mat-card>
+
+        <mat-card>
+
+          <h3>Memory Usage</h3>
+
+          <h2
+            [style.color]="
+              ram > 85
+                ? '#ef4444'
+                : ram > 70
+                ? '#f59e0b'
+                : '#22c55e'
+            "
+          >
+            {{ ram }}%
+          </h2>
+
+        </mat-card>
+
+        <mat-card>
+
+          <h3>Uptime</h3>
+
+          <h2>{{ uptime }}</h2>
+
+        </mat-card>
+
+        <mat-card>
+
+          <h3>Status</h3>
+
+          <h2
+            [ngStyle]="{
+              color:
+                status === 'HEALTHY'
+                  ? '#22c55e'
+                  : status === 'WARNING'
+                  ? '#f59e0b'
+                  : '#ef4444'
+            }"
+          >
+            {{ status }}
+          </h2>
+
+        </mat-card>
+
+      </div>
+
+      <!-- CHART -->
+
+      <mat-card class="chart-card">
+
+        <h3>Live System Metrics</h3>
+
+        <canvas #cpuChartCanvas></canvas>
+
+      </mat-card>
+
+    </div>
+
+    <!-- SERVER CARDS -->
+
+    <div class="servers-grid">
+
+      <mat-card
+        class="server-card"
+        *ngFor="let server of servers"
+      >
+
+        <h2>{{ server.name }}</h2>
+
+        <p>
+          <strong>Type:</strong>
+          {{ server.type }}
+        </p>
+
+        <p>
+          <strong>Region:</strong>
+          {{ server.region }}
+        </p>
+
+        <p>
+          <strong>Status:</strong>
+
+          <span
+            [ngStyle]="{
+              color:
+                server.status === 'running'
+                  ? '#22c55e'
+                  : '#ef4444'
+            }"
+          >
+            {{ server.status | uppercase }}
+          </span>
+        </p>
+
+        <p>
+          <strong>CPU:</strong>
+          {{ server.cpu }}%
+        </p>
+
+        <div class="progress-bar">
+
+          <div
+            class="progress cpu"
+            [style.width.%]="server.cpu">
+          </div>
+
+        </div>
+
+        <p>
+          <strong>RAM:</strong>
+          {{ server.ram }}%
+        </p>
+
+        <div class="progress-bar">
+
+          <div
+            class="progress ram"
+            [style.width.%]="server.ram">
+          </div>
+
+        </div>
+
+        <!-- HEALTH -->
+
+        <h3
+          [ngStyle]="{
+            color:
+              server.health === 'HEALTHY'
+                ? '#22c55e'
+                : server.health === 'WARNING'
+                ? '#f59e0b'
+                : server.health === 'CRITICAL'
+                ? '#ef4444'
+                : '#6b7280'
+          }"
+        >
+          {{ server.health }}
+        </h3>
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="viewLogs(server.name)"
+        >
+          View Logs
+        </button>
+
+      </mat-card>
+
+    </div>
+
+    <!-- LOG VIEWER -->
+
+    <mat-card
+      *ngIf="logs"
+      class="logs-card"
+    >
+
+      <h2>
+        📜 Logs: {{ selectedContainer }}
+      </h2>
+<pre class="logs-box">{{ logs }}</pre>
+
+    </mat-card>
+
+    <!-- ALERTS -->
+
+    <mat-card
+      *ngIf="alerts.length > 0"
+      style="margin:24px;"
+    >
+
+      <h2>🚨 Recent Alerts</h2>
+
+      <div
+        *ngFor="let alert of alerts"
+        style="
+          padding:10px;
+          margin:8px 0;
+          border-left:4px solid #ef4444;
+          background:#1f2937;
+          color:white;
+        "
+      >
+        {{ alert }}
+      </div>
+
+    </mat-card>
+
+    <!-- EMPTY STATE -->
+
+    <div
+      *ngIf="servers.length === 0"
+      style="
+        text-align:center;
+        padding:40px;
+      "
+    >
+      Loading system metrics...
+    </div>
 
   </mat-sidenav-content>
 

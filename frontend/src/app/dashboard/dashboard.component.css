@@ -1,14 +1,158 @@
+/* ==========================================================================
+   1. LAYOUT & FULL-SCREEN CONTAINERS
+   ========================================================================== */
 .container {
   height: 100vh;
+  width: 100vw;
+  background-color: #0f172a; /* Deep layout backdrop */
 }
 
+/* Right Side Main Content Area */
+mat-sidenav-content {
+  background-color: #0f172a; /* Keeps core dashboard dark slate */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   2. LEFT NAVIGATION SIDEBAR
+   ========================================================================== */
+
+
+   mat-sidenav {
+  width: 240px;
+  background-color: #151f32 !important; /* Rich, dark navy backdrop */
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Sidenav logo header block ("CloudPulse") */
+mat-sidenav mat-toolbar {
+  background-color: #151f32 !important;
+  color: #ffffff !important;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Top Content Header Panel ("🚀 CloudPulse DevOps Dashboard") */
+mat-sidenav-content mat-toolbar {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  font-weight: bold;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Nav list link wrapper adjustments */
+mat-nav-list a[mat-list-item] {
+  margin: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  font-weight: 500;
+}
+
+/* Hover feedback state for sidebar items */
+mat-nav-list a[mat-list-item]:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+mat-nav-list {
+  --mdc-list-list-item-label-text-color: #ffffff !important;
+  --mdc-list-list-item-hover-label-text-color: #ffffff !important;
+  --mat-sys-on-surface: #ffffff !important;
+}
+/* ==========================================================================
+   3. GRIDS & CARDS STYLING
+   ========================================================================== */
+/* Top Row Analytics Cards Container */
 .content {
-  padding: 20px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  padding: 24px;
+}
+
+/* Individual Server Cards Container (Bottom) */
+.servers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 0 24px 24px 24px;
+}
+
+/* Base style for all material cards */
+mat-card {
+  background-color: #1e293b !important; /* Premium dark slate card background */
+  color: #ffffff !important;
+  padding: 20px;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ==========================================================================
+   4. PROGRESS BAR GRAPHICS (NEW)
+   ========================================================================== */
+/* The outer track layer */
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #334155; /* Dark gray track line */
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+/* The fluid filled dynamic indicator line */
+.progress {
+  height: 100%;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother metric fills */
+}
+
+/* CPU Crimson Variant fill */
+.cpu {
+  background: #ef4444; 
+}
+
+/* RAM Cobalt Variant fill */
+.ram {
+  background: #3b82f6; 
+}
+.mat-mdc-snack-bar-container {
+
+  --mdc-snackbar-container-color: #1e293b !important;
+
+  --mdc-snackbar-supporting-text-color: white !important;
+}
+/* ===============================
+   SUMMARY CARDS
+================================= */
+
+.summary-grid {
+  grid-column: 1 / -1;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(200px, 1fr));
+
   gap: 20px;
 }
-canvas {
-  width: 100%;
-  height: 250px;
+
+.summary-grid mat-card {
+  text-align: center;
+}
+
+.summary-grid h2 {
+  font-size: 2rem;
+  margin-top: 10px;
+  color: #60a5fa;
+}
+.logs-box{
+  max-height:400px;
+  overflow-y:auto;
+  background:#0f172a;
+  color:#e2e8f0;
+  padding:15px;
+  border-radius:8px;
+  white-space:pre-wrap;
+  word-break:break-word;
 }
